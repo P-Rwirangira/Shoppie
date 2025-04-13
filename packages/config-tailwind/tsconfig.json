@@ -1,0 +1,16 @@
+{
+  "extends": "@repo/typescript-config/base.json",
+  "include": [
+    ".",
+    "**/*.ts",
+    "**/*.tsx",
+    "apps/**/*",
+    "packages/**/*",
+    "apps/customer/tailwind.config.ts"
+  ],
+  "exclude": [
+    "dist",
+    "build",
+    "node_modules"
+  ]
+}

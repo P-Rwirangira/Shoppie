@@ -1,0 +1,576 @@
+openapi: 3.0.0
+info:
+  title: Product API
+  version: 1.0.0
+  description: API documentation for managing products in Chafetz E-commerce.
+
+paths:
+  /products:
+    post:
+      summary: Create a new product
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the product
+                description:
+                  type: string
+                  description: A detailed description of the product
+                colors:
+                  type: array
+                  items:
+                    type: string
+                  description: An array of color options for the product
+                categoryName:
+                  type: string
+                  description: The category to which the product belongs
+                sizes:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      size:
+                        type: string
+                        description: The size option (e.g., S, M, L)
+                      price:
+                        type: number
+                        description: The price of the product for this size
+                      quantity:
+                        type: number
+                        description: The available stock quantity for this size
+                      discount:
+                        type: number
+                        description: Discount percentage for this size (optional)
+                      expiryDate:
+                        type: string
+                        format: date
+                        description: Expiry date for this size (optional)
+                  description: An array of size options for the product
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: At least 4 images of the product
+              required:
+                - name
+                - description
+                - categoryName
+                - sizes
+                - images
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    description: Indicates if the operation was successful
+                  message:
+                    type: string
+                    description: Success message
+                  data:
+                    type: object
+                    properties:
+                      product:
+                        type: object
+                        description: The created product details
+                      sizes:
+                        type: array
+                        items:
+                          type: string
+                        description: IDs of the created sizes
+        '400':
+          description: Bad request (e.g., missing fields, insufficient images)
+        '401':
+          description: Unauthorized (missing or invalid token)
+        '403':
+          description: Forbidden (e.g., user not authorized to create products)
+  
+    get:
+      summary: Get all products
+      tags:
+        - Products
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    description: Indicates if the operation was successful
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The unique ID of the product
+                        name:
+                          type: string
+                          description: The name of the product
+                        description:
+                          type: string
+                          description: A detailed description of the product
+                        images:
+                          type: array
+                          items:
+                            type: string
+                          description: URLs of the product images
+                        colors:
+                          type: array
+                          items:
+                            type: string
+                          description: Available color options for the product
+                        categoryName:
+                          type: string
+                          description: The category to which the product belongs
+                        sizes:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              size:
+                                type: string
+                                description: The size option (e.g., S, M, L)
+                              price:
+                                type: number
+                                description: The price of the product for this size
+                              quantity:
+                                type: number
+                                description: The available stock quantity for this size
+                              discount:
+                                type: number
+                                description: Discount percentage for this size (optional)
+                              expiryDate:
+                                type: string
+                                format: date
+                                description: Expiry date for this size (optional)
+        '401':
+          description: Unauthorized (missing or invalid token)
+
+  /products/{productId}:
+    put:
+      summary: Update a product by ID
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                colors:
+                  type: array
+                  items:
+                    type: string
+                categoryName:
+                  type: string
+                sizes:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      size:
+                        type: string
+                      price:
+                        type: number
+                      quantity:
+                        type: number
+                      discount:
+                        type: number
+                      expiryDate:
+                        type: string
+                        format: date
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: Product updated successfully
+        '404':
+          description: Product not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+    delete:
+      summary: Delete a product by ID
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product deleted successfully
+        '404':
+          description: Product not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+    get:
+      summary: Get a single product by ID
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  images:
+                    type: array
+                    items:
+                      type: string
+                  colors:
+                    type: array
+                    items:
+                      type: string
+                  categoryName:
+                    type: string
+                  sizes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        size:
+                          type: string
+                        price:
+                          type: number
+                        quantity:
+                          type: number
+                        discount:
+                          type: number
+                        expiryDate:
+                          type: string
+                          format: date
+        '404':
+          description: Product not found
+        '401':
+          description: Unauthorized
+
+  /products/seller/{sellerId}:
+    get:
+      summary: Get all products by a particular seller
+      tags:
+        - Products
+      parameters:
+        - name: sellerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of products by the seller
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    images:
+                      type: array
+                      items:
+                        type: string
+                    colors:
+                      type: array
+                      items:
+                        type: string
+                    categoryName:
+                      type: string
+                    sizes:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          size:
+                            type: string
+                          price:
+                            type: number
+                          quantity:
+                            type: number
+                          discount:
+                            type: number
+                          expiryDate:
+                            type: string
+                            format: date
+        '404':
+          description: Seller not found
+        '401':
+          description: Unauthorized
+
+  /products/sizes:
+    get:
+      summary: Get all sizes
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A list of sizes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    size:
+                      type: string
+                    price:
+                      type: number
+                    quantity:
+                      type: number
+                    discount:
+                      type: number
+                    expiryDate:
+                      type: string
+                      format: date
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+  /products/sizes/{sizeId}:
+    put:
+      summary: Update a size by ID
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: sizeId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                size:
+                  type: string
+                price:
+                  type: number
+                quantity:
+                  type: number
+                discount:
+                  type: number
+                expiryDate:
+                  type: string
+                  format: date
+      responses:
+        '200':
+          description: Size updated successfully
+        '404':
+          description: Size not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+  /products/sizes/{sizeId}/unavailable:
+    put:
+      summary: Mark a size as unavailable
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: sizeId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Size marked as unavailable
+        '404':
+          description: Size not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+  /products/sizes/{sizeId}/available:
+    put:
+      summary: Mark a size as available
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: sizeId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Size marked as available
+        '404':
+          description: Size not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+  /products/{productId}/review:
+    post:
+      summary: Provide a review for a product
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: number
+                feedback:
+                  type: string
+                feedbackImage:
+                  type: string
+                  format: binary
+              required:
+                - rating
+      responses:
+        '201':
+          description: Review created successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+    delete:
+      summary: Delete a review by ID
+      tags:
+        - Products
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: reviewId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Review deleted successfully
+        '404':
+          description: Review not found
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+  /products/{productId}/review/statistics:
+    get:
+      summary: Calculate the average rating for a product
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Average rating for the product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  averageRating:
+                    type: number
+        '404':
+          description: Product not found
+        '401':
+          description: Unauthorized

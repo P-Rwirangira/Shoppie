@@ -1,0 +1,14 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "extends": "./base.json",
+    "display": "Server",
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "noImplicitReturns": false,
+        "removeComments": true,
+        "module": "commonjs",
+        "target": "es6",
+        "moduleResolution": "node",
+        "esModuleInterop": true
+    }
+}

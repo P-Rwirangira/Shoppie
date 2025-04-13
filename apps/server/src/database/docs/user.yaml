@@ -1,0 +1,186 @@
+openapi: 3.0.0
+info:
+  title: User API
+  version: 1.0.0
+  description: API documentation for User endpoints
+
+paths:
+  /users/signup:
+    post:
+      summary: Sign up a new user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                gender:
+                  type: string
+                phoneNumber:
+                  type: string
+              required:
+                - firstName
+                - lastName
+                - email
+                - password
+                - gender
+                - phoneNumber
+      responses:
+        201:
+          description: User created successfully
+        400:
+          description: Bad request
+
+  /users/resend-verify-link:
+    post:
+      summary: Resend verification link
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+      responses:
+        201:
+          description: Verification link resent successfully
+        400:
+          description: Bad request
+
+  /users:
+    get:
+      summary: Get all users
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: List of users
+        401:
+          description: Unauthorized
+
+  /users/{id}:
+    get:
+      summary: Get one user
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: User details
+        401:
+          description: Unauthorized
+        404:
+          description: User not found
+
+    put:
+      summary: Edit user
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                gender:
+                  type: string
+                phoneNumber:
+                  type: string
+      responses:
+        200:
+          description: User updated successfully
+        401:
+          description: Unauthorized
+        404:
+          description: User not found
+
+    delete:
+      summary: Delete a user
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: User deleted successfully
+        401:
+          description: Unauthorized
+        404:
+          description: User not found
+
+  /users/{userId}/role:
+    put:
+      summary: Edit user role
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roleId:
+                  type: string
+              required:
+                - roleId
+      responses:
+        200:
+          description: Role updated successfully
+        401:
+          description: Unauthorized
+        404:
+          description: User or role not found

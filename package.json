@@ -1,0 +1,58 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "build:server": "turbo build --filter=@chafetz/server",
+    "build:dashboard": "turbo build --filter=@chafetz/dashboard",
+    "build:customer": "turbo build --filter=@chafetz/customer",
+    "dev": "turbo dev",
+    "dev:server": "turbo dev --filter=@chafetz/server",
+    "dev:dashboard": "turbo dev --filter=@chafetz/dashboard",
+    "dev:customer": "turbo dev --filter=@chafetz/customer",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint -- --fix",
+    "lint:server": "turbo lint --filter=@chafetz/server",
+    "lint:dashboard": "turbo lint --filter=@chafetz/dashboard",
+    "lint:customer": "turbo lint --filter=@chafetz/customer",
+    "start": "turbo start --filter=@chafetz/server --filter=@chafetz/dashboard --filter=@chafetz/customer --parallel",
+    "type-check": "turbo type-check",
+    "clean": "turbo clean",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prepare": "husky",
+    "test": "turbo test"
+  },
+  "devDependencies": {
+    "eslint-plugin-jest": "^28.11.0",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "turbo": "^2.2.3",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "name": "with-tailwind",
+  "packageManager": "npm@10.8.1",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "lint-staged": {
+    "apps/**/*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "packages/ui/**/*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^8.1.4",
+    "@types/jsonwebtoken": "^9.0.9",
+    "dotenv": "^16.4.7",
+    "nodemailer": "^6.10.0"
+  }
+}
