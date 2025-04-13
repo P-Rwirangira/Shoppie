@@ -1,0 +1,19 @@
+{
+    "extends": "@repo/typescript-config/server.json",
+    "compilerOptions": {
+        "outDir": "./dist",
+        "rootDir": ".",
+        "moduleResolution": "node",
+        "forceConsistentCasingInFileNames": true
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist",
+        ".turbo",
+        "coverage",
+        "src/**/*/*.test.ts"
+    ]
+}

@@ -1,0 +1,48 @@
+openapi: 3.0.0
+info:
+  title: Manage User Status API
+  version: 1.0.0
+  description: API documentation for managing user status (activate/deactivate)
+
+paths:
+  /users/{userId}/activate:
+    put:
+      summary: Activate user account
+      tags:
+        - User Status
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: User activated successfully
+        401:
+          description: Unauthorized
+        404:
+          description: User not found
+
+  /users/{userId}/deactivate:
+    put:
+      summary: Deactivate user account
+      tags:
+        - User Status
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: User deactivated successfully
+        401:
+          description: Unauthorized
+        404:
+          description: User not found
