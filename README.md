@@ -1,2 +1,0 @@
-# Shoppie
-E-commerce platform
